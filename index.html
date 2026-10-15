@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f8f2">
+  <title>GreenSteps | Student Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18352c;
+      --muted: #78877d;
+      --forest: #23734d;
+      --forest-dark: #17583c;
+      --leaf: #a8d978;
+      --paper: #f5f8f2;
+      --line: #e8eee5;
+      --white: #fff;
+      --orange: #e8a15b;
+      font-family: 'DM Sans', sans-serif;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .app-shell { min-height: 100vh; }
+    .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; padding: 0 6.2%; background: rgba(255,255,255,.88); border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 800 20px Manrope, sans-serif; letter-spacing: -.5px; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: #e4f1d9; color: var(--forest); }
+    .brand-mark svg { width: 20px; height: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 25px; color: var(--muted); font-size: 13px; }
+    .nav-link { color: inherit; text-decoration: none; }
+    .profile { display: flex; align-items: center; gap: 9px; color: var(--ink); font-weight: 600; }
+    .avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: #fff; background: #d58c5c; font-size: 12px; font-weight: 700; }
+
+    main { max-width: 1160px; margin: 0 auto; padding: 38px 26px 56px; }
+    .welcome { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 25px; }
+    .eyebrow { margin: 0 0 8px; color: var(--forest); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 6px; font: 800 30px Manrope, sans-serif; letter-spacing: -.8px; }
+    .welcome-copy { margin: 0; color: var(--muted); font-size: 14px; }
+    .date-chip { display: flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 9px; color: #607267; background: #fff; font-size: 12px; white-space: nowrap; }
+    .date-chip svg { width: 16px; height: 16px; color: var(--forest); }
+
+    .overview { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .95fr); gap: 18px; margin-bottom: 26px; }
+    .points-panel { position: relative; display: flex; min-height: 210px; overflow: hidden; padding: 27px 30px; border-radius: 12px; color: #fff; background: var(--forest-dark); }
+    .points-panel::after { position: absolute; content: ''; width: 240px; height: 240px; top: -102px; right: -18px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; box-shadow: 0 0 0 28px rgba(255,255,255,.035), 0 0 0 58px rgba(255,255,255,.025); }
+    .points-content { position: relative; z-index: 1; width: 100%; }
+    .points-label { margin: 0 0 12px; color: #c4ddc9; font-size: 12px; font-weight: 600; }
+    .points-number { margin: 0; font: 800 49px Manrope, sans-serif; letter-spacing: -1.8px; line-height: 1; }
+    .points-number span { margin-left: 6px; color: #b8d998; font: 600 13px 'DM Sans', sans-serif; letter-spacing: 0; }
+    .points-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 24px; }
+    .points-foot p { margin: 0; color: #c4ddc9; font-size: 12px; }
+    .streak { display: flex; align-items: center; gap: 6px; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .streak svg { width: 16px; height: 16px; color: #f2b66f; }
+    .goal-panel { display: flex; flex-direction: column; justify-content: space-between; padding: 23px 23px 21px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+    .goal-heading { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+    .goal-heading h2 { margin: 0 0 5px; font: 700 15px Manrope, sans-serif; }
+    .goal-heading p { margin: 0; color: var(--muted); font-size: 12px; }
+    .goal-icon { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 10px; color: var(--forest); background: #edf5e8; }
+    .goal-icon svg { width: 19px; height: 19px; }
+    .goal-stats { display: flex; justify-content: space-between; align-items: baseline; margin: 21px 0 9px; }
+    .goal-stats strong { font: 800 23px Manrope, sans-serif; }
+    .goal-stats span { color: var(--muted); font-size: 11px; }
+    .progress-track { height: 8px; overflow: hidden; border-radius: 8px; background: #eaf0e6; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: #78b95b; transition: width .4s ease; }
+    .goal-caption { margin: 10px 0 0; color: var(--muted); font-size: 11px; }
+
+    .content-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .95fr); align-items: start; gap: 18px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .section-heading h2 { margin: 0 0 4px; font: 750 18px Manrope, sans-serif; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 12px; }
+    .section-kicker { color: var(--forest); font-size: 11px; font-weight: 700; }
+    .actions-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }
+    .action-card { min-height: 158px; display: flex; flex-direction: column; align-items: flex-start; padding: 16px; border: 1px solid var(--line); border-radius: 10px; text-align: left; background: #fff; transition: border-color .18s, transform .18s, box-shadow .18s; }
+    .action-card:hover { transform: translateY(-2px); border-color: #b9d4ae; box-shadow: 0 7px 20px rgba(41,81,52,.07); }
+    .action-icon { display: grid; place-items: center; width: 37px; height: 37px; margin-bottom: 12px; border-radius: 11px; color: #39754b; background: #edf5e8; }
+    .action-icon svg { width: 20px; height: 20px; }
+    .action-card:nth-child(2) .action-icon { color: #39788a; background: #e9f3f4; }
+    .action-card:nth-child(3) .action-icon { color: #b17b35; background: #faf2e3; }
+    .action-card:nth-child(4) .action-icon { color: #658744; background: #f0f4e6; }
+    .action-card:nth-child(5) .action-icon { color: #557a9a; background: #edf2f7; }
+    .action-card:nth-child(6) .action-icon { color: #8a6d48; background: #f5f0e8; }
+    .action-name { margin-bottom: 3px; font-size: 12px; font-weight: 700; }
+    .action-detail { margin-bottom: auto; color: var(--muted); font-size: 10px; }
+    .action-reward { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 11px; padding-top: 9px; border-top: 1px solid #f0f3ee; color: var(--forest); font-size: 11px; font-weight: 700; }
+    .action-reward span:last-child { color: #74867a; font-size: 10px; font-weight: 500; }
+
+    .side-column { display: grid; gap: 16px; }
+    .side-panel { padding: 19px; border: 1px solid var(--line); border-radius: 11px; background: #fff; }
+    .side-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .side-title h2 { margin: 0; font: 750 15px Manrope, sans-serif; }
+    .side-title span { color: var(--muted); font-size: 10px; }
+    .leader-row { display: grid; grid-template-columns: 24px 31px minmax(0, 1fr) auto; align-items: center; gap: 9px; min-height: 49px; border-bottom: 1px solid #f0f3ee; }
+    .leader-row:last-child { border-bottom: 0; }
+    .rank { color: #87958a; font-size: 11px; font-weight: 600; text-align: center; }
+    .leader-avatar { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #e9f0df; color: #527047; font-size: 10px; font-weight: 700; }
+    .leader-row:nth-of-type(2) .leader-avatar { background: #f8eadb; color: #9a6840; }
+    .leader-row:nth-of-type(3) .leader-avatar { background: #e5eef1; color: #4d7680; }
+    .leader-name { overflow: hidden; color: #3a4c41; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .leader-points { color: var(--forest); font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .leader-row.you { margin: 3px -9px -3px; padding: 0 9px; border: 0; border-radius: 7px; background: #f2f7ec; }
+    .you-tag { margin-left: 4px; color: #7c9a68; font-size: 9px; font-weight: 600; }
+    .activity-list { display: grid; gap: 12px; }
+    .activity-item { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 9px; }
+    .activity-symbol { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 9px; color: var(--forest); background: #edf5e8; }
+    .activity-symbol svg { width: 15px; height: 15px; }
+    .activity-copy { min-width: 0; }
+    .activity-copy strong { display: block; overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+    .activity-copy span { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .activity-points { color: var(--forest); font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .empty-activity { padding: 4px 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; padding: 12px 16px; border: 1px solid #cfe1c3; border-radius: 9px; color: var(--forest-dark); background: #fff; box-shadow: 0 10px 30px rgba(24,53,44,.12); font-size: 12px; font-weight: 600; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 780px) {
+      .topbar { padding: 0 20px; }
+      main { padding: 30px 20px 42px; }
+      .overview, .content-grid { grid-template-columns: 1fr; }
+      .goal-panel { min-height: 168px; }
+      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 540px) {
+      .topbar { height: 64px; }
+      .nav-right { gap: 13px; }
+      .nav-link { display: none; }
+      main { padding: 25px 15px 34px; }
+      .welcome { align-items: start; flex-direction: column; gap: 14px; }
+      h1 { font-size: 26px; }
+      .date-chip { align-self: start; }
+      .points-panel { min-height: 190px; padding: 24px; }
+      .points-number { font-size: 44px; }
+      .actions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .action-card { min-height: 151px; padding: 14px; }
+      .side-column { grid-template-columns: 1fr; }
+      .section-heading h2 { font-size: 17px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="GreenSteps home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 3.5c-8.2 0-14 3.7-14 10a6 6 0 0 0 6 6c6.3 0 8-8.1 8-16Z"/><path d="M3.5 21c2.4-5.8 6.7-9.5 12-12"/></svg></span>
+        GreenSteps
+      </a>
+      <div class="nav-right">
+        <a class="nav-link" href="#actions">My actions</a>
+        <a class="nav-link" href="#leaderboard">Leaderboard</a>
+        <div class="profile"><span class="avatar" aria-hidden="true">MC</span><span>Maya Chen</span></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="welcome" aria-labelledby="welcome-title">
+        <div>
+          <p class="eyebrow">Your impact, in action</p>
+          <h1 id="welcome-title">Good morning, Maya <span aria-hidden="true">&#127793;</span></h1>
+          <p class="welcome-copy">Small choices add up. Keep growing your green streak.</p>
+        </div>
+        <div class="date-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="today-date"></span></div>
+      </section>
+
+      <section class="overview" aria-label="Points and weekly progress">
+        <article class="points-panel">
+          <div class="points-content">
+            <p class="points-label">Your lifetime green points</p>
+            <p class="points-number"><span id="total-points">0</span><span>pts</span></p>
+            <div class="points-foot"><p>Every action makes a difference.</p><span class="streak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2.5c.3 3.1-1.3 4.8-2.9 6.2-1.7 1.5-3.1 3-3.1 5.6a4.5 4.5 0 0 0 9 0c0-1.5-.7-2.9-1.8-4.2-.1 1.8-.9 2.7-1.6 3.2.2-3.4-1.2-7.2-3.4-9.3.1 2.3-.6 3.5-1.3 4.4C7 7.7 8.7 4.4 13.5 2.5Z"/></svg><span id="streak-count">0 day streak</span></span></div>
+          </div>
+        </article>
+        <article class="goal-panel">
+          <div class="goal-heading"><div><h2>This week's goal</h2><p>Earn 250 points this week</p></div><span class="goal-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.5c0 4.7 3.2 7.8 7.5 9.5 4.3-1.7 7.5-4.8 7.5-9.5V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg></span></div>
+          <div><div class="goal-stats"><strong><span id="weekly-points">0</span> <small>pts</small></strong><span id="goal-percent">0% complete</span></div><div class="progress-track" role="progressbar" aria-label="Weekly points goal" aria-valuemin="0" aria-valuemax="250" aria-valuenow="0"><div class="progress-fill" id="goal-progress"></div></div><p class="goal-caption" id="goal-caption">250 points to reach your goal</p></div>
+        </article>
+      </section>
+
+      <div class="content-grid">
+        <section id="actions" aria-labelledby="actions-title">
+          <div class="section-heading"><div><h2 id="actions-title">Log a green action</h2><p>Choose an action you've taken today</p></div><span class="section-kicker">MAKE IT COUNT</span></div>
+          <div class="actions-grid" id="action-list"></div>
+        </section>
+        <aside class="side-column">
+          <section class="side-panel" id="leaderboard" aria-labelledby="leaderboard-title">
+            <div class="side-title"><h2 id="leaderboard-title">Green leaders</h2><span>ALL TIME</span></div>
+            <div id="leaderboard-list" aria-live="polite"></div>
+          </section>
+          <section class="side-panel" aria-labelledby="activity-title">
+            <div class="side-title"><h2 id="activity-title">Recent activity</h2><span id="activity-count">0 actions</span></div>
+            <div class="activity-list" id="activity-list" aria-live="polite"></div>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const actions = [
+      { id: 'recycling', name: 'Recycled waste', detail: 'Sorted paper, glass or cans', points: 15, icon: '<path d="m7 7 2-3h6l2 3M5 9h14l-1 11H6L5 9Z"/><path d="m9 12 3 4 3-4M12 16v-5"/>' },
+      { id: 'transit', name: 'Took public transit', detail: 'Bus, train or shared ride', points: 25, icon: '<path d="M5 17h14l1-9a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3l1 9Z"/><path d="M7 17v2m10-2v2M5 12h14M8 9h.01M16 9h.01M8 20h8"/>' },
+      { id: 'reusable', name: 'Used a reusable bottle', detail: 'Refilled instead of buying new', points: 10, icon: '<path d="M9 3h6v3l1 2v12H8V8l1-2V3Z"/><path d="M8 11h8M10 3h4"/>' },
+      { id: 'plastic', name: 'Skipped single-use plastic', detail: 'Brought your own bag or cup', points: 20, icon: '<path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V5a3 3 0 0 1 6 0v3M12 11v5m-2-2 2 2 2-2"/>' },
+      { id: 'walking', name: 'Walked or biked', detail: 'Left the car at home', points: 20, icon: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="m6 17 4-7h4l4 7m-8-7-2-3H5m7 3 3 3h3"/>' },
+      { id: 'plant-meal', name: 'Chose a plant-based meal', detail: 'A lighter choice for the planet', points: 15, icon: '<path d="M20 4c-8 0-14 3.4-14 9.3a5.7 5.7 0 0 0 5.7 5.7C17.7 19 20 11.6 20 4Z"/><path d="M3 21c2.4-5.2 6.3-8.5 11-11"/>' }
+    ];
+    const classmates = [
+      { name: 'Olivia Martinez', initials: 'OM', points: 640 },
+      { name: 'Ethan Williams', initials: 'EW', points: 520 },
+      { name: 'Ava Johnson', initials: 'AJ', points: 435 },
+      { name: 'Noah Patel', initials: 'NP', points: 390 },
+      { name: 'Mia Thompson', initials: 'MT', points: 325 }
+    ];
+    const storageKey = 'greensteps-maya-actions-v1';
+    let entries = loadEntries();
+    let toastTimeout;
+
+    function loadEntries() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        return Array.isArray(saved) ? saved.filter(entry => actions.some(action => action.id === entry.id) && Number.isFinite(entry.time)) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function icon(markup) {
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${markup}</svg>`;
+    }
+
+    function renderActions() {
+      document.querySelector('#action-list').innerHTML = actions.map(action => `
+        <button class="action-card" type="button" data-action="${action.id}" aria-label="Log ${action.name}, earn ${action.points} points">
+          <span class="action-icon">${icon(action.icon)}</span>
+          <span class="action-name">${action.name}</span>
+          <span class="action-detail">${action.detail}</span>
+          <span class="action-reward"><span>+${action.points} points</span><span>Log action +</span></span>
+        </button>`).join('');
+    }
+
+    function mondayStart(timestamp) {
+      const date = new Date(timestamp);
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() - (date.getDay() + 6) % 7);
+      return date.getTime();
+    }
+
+    function render() {
+      const total = entries.reduce((sum, entry) => sum + entry.points, 0);
+      const weekTotal = entries.filter(entry => entry.time >= mondayStart(Date.now())).reduce((sum, entry) => sum + entry.points, 0);
+      const percent = Math.min(100, Math.round(weekTotal / 250 * 100));
+      document.querySelector('#total-points').textContent = total.toLocaleString();
+      document.querySelector('#weekly-points').textContent = weekTotal.toLocaleString();
+      document.querySelector('#goal-percent').textContent = `${percent}% complete`;
+      document.querySelector('#goal-progress').style.width = `${percent}%`;
+      document.querySelector('.progress-track').setAttribute('aria-valuenow', String(Math.min(250, weekTotal)));
+      document.querySelector('#goal-caption').textContent = weekTotal >= 250 ? 'Weekly goal reached. Amazing work!' : `${250 - weekTotal} points to reach your goal`;
+
+      const activeDays = new Set(entries.filter(entry => entry.time >= Date.now() - 7 * 86400000).map(entry => new Date(entry.time).toDateString()));
+      document.querySelector('#streak-count').textContent = `${activeDays.size} day${activeDays.size === 1 ? '' : 's'} active this week`;
+
+      const ranking = [...classmates, { name: 'Maya Chen', initials: 'MC', points: total, isYou: true }].sort((a, b) => b.points - a.points);
+      document.querySelector('#leaderboard-list').innerHTML = ranking.slice(0, 5).map((student, index) => `
+        <div class="leader-row${student.isYou ? ' you' : ''}"${student.isYou ? ' aria-current="true"' : ''}>
+          <span class="rank">${index + 1}</span><span class="leader-avatar">${student.initials}</span>
+          <span class="leader-name">${student.name}${student.isYou ? '<span class="you-tag">YOU</span>' : ''}</span>
+          <span class="leader-points">${student.points.toLocaleString()} pts</span>
+        </div>`).join('');
+
+      const recent = [...entries].sort((a, b) => b.time - a.time).slice(0, 4);
+      document.querySelector('#activity-count').textContent = `${entries.length} action${entries.length === 1 ? '' : 's'}`;
+      document.querySelector('#activity-list').innerHTML = recent.length ? recent.map(entry => {
+        const action = actions.find(item => item.id === entry.id);
+        const elapsed = Date.now() - entry.time;
+        const when = elapsed < 60000 ? 'Just now' : elapsed < 3600000 ? `${Math.floor(elapsed / 60000)} min ago` : new Date(entry.time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        return `<div class="activity-item"><span class="activity-symbol">${icon(action.icon)}</span><span class="activity-copy"><strong>${action.name}</strong><span>${when}</span></span><span class="activity-points">+${action.points}</span></div>`;
+      }).join('') : '<p class="empty-activity">Your green actions will show up here. Pick one to get started.</p>';
+    }
+
+    function showToast(message) {
+      const toast = document.querySelector('#toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    document.querySelector('#action-list').addEventListener('click', event => {
+      const button = event.target.closest('[data-action]');
+      if (!button) return;
+      const action = actions.find(item => item.id === button.dataset.action);
+      entries.push({ id: action.id, points: action.points, time: Date.now() });
+      try { localStorage.setItem(storageKey, JSON.stringify(entries)); } catch { /* Keep the session usable if storage is unavailable. */ }
+      render();
+      showToast(`+${action.points} points for ${action.name.toLowerCase()}!`);
+    });
+
+    document.querySelector('#today-date').textContent = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date());
+    renderActions();
+    render();
+  </script>
+</body>
+</html>
